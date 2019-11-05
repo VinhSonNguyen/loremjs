@@ -1,22 +1,19 @@
 var Lorem;
-(function() {
 
-    //Create a class named Lorem and constructor
+
+    // Create a class named Lorem and constructor
     Lorem = function() {
-        //Default values.
-        this.type = null;
-        this.query = null;
+        // Default values.
         this.data = null;
-    };
-    //Static variables
-    Lorem.IMAGE = 1;
+    };//
+    // Static variables
     Lorem.TEXT = 2;
     Lorem.TYPE = {
         PARAGRAPH: 1,
         SENTENCE: 2,
         WORD: 3
     };
-    //Words to create lorem ipsum text.
+    // Words to create lorem ipsum text.
     Lorem.WORDS = [
         "lorem", "ipsum", "dolor", "sit", "amet,", "consectetur", "adipiscing", "elit", "ut", "aliquam,", "purus", "sit", "amet", "luctus", "venenatis,", "lectus", "magna", "fringilla", "urna,", "porttitor", "rhoncus", "dolor", "purus", "non", "enim", "praesent", "elementum", "facilisis", "leo,", "vel", "fringilla", "est", "ullamcorper", "eget", "nulla", "facilisi", "etiam", "dignissim", "diam", "quis", "enim", "lobortis", "scelerisque", "fermentum", "dui", "faucibus", "in", "ornare", "quam", "viverra", "orci", "sagittis", "eu", "volutpat", "odio", "facilisis", "mauris", "sit", "amet", "massa", "vitae", "tortor", "condimentum", "lacinia", "quis", "vel", "eros", "donec", "ac", "odio", "tempor", "orci", "dapibus", "ultrices", "in", "iaculis", "nunc", "sed", "augue", "lacus,", "viverra", "vitae", "congue", "eu,", "consequat", "ac", "felis", "donec", "et", "odio", "pellentesque", "diam", "volutpat", "commodo", "sed", "egestas", "egestas", "fringilla", "phasellus", "faucibus", "scelerisque", "eleifend", "donec", "pretium", "vulputate", "sapien", "nec", "sagittis", "aliquam", "malesuada", "bibendum", "arcu", "vitae", "elementum",
         "curabitur", "vitae", "nunc", "sed", "velit", "dignissim", "sodales", "ut", "eu", "sem", "integer", "vitae", "justo", "eget", "magna", "fermentum", "iaculis", "eu", "non", "diam", "phasellus", "vestibulum", "lorem", "sed", "risus", "ultricies", "tristique", "nulla", "aliquet", "enim", "tortor,", "at", "auctor", "urna", "nunc", "id", "cursus", "metus", "aliquam", "eleifend", "mi", "in", "nulla", "posuere", "sollicitudin", "aliquam", "ultrices", "sagittis", "orci,", "a", "scelerisque", "purus", "semper", "eget", "duis", "at", "tellus", "at", "urna", "condimentum", "mattis", "pellentesque", "id", "nibh", "tortor,", "id", "aliquet", "lectus", "proin", "nibh", "nisl,", "condimentum", "id", "venenatis", "a,", "condimentum", "vitae", "sapien", "pellentesque", "habitant", "morbi", "tristique", "senectus", "et", "netus", "et", "malesuada", "fames", "ac", "turpis", "egestas", "sed", "tempus,", "urna", "et", "pharetra", "pharetra,", "massa", "massa", "ultricies", "mi,", "quis", "hendrerit", "dolor", "magna", "eget", "est", "lorem", "ipsum", "dolor", "sit", "amet,", "consectetur", "adipiscing", "elit", "pellentesque", "habitant", "morbi", "tristique", "senectus", "et", "netus", "et", "malesuada", "fames", "ac", "turpis", "egestas", "integer", "eget", "aliquet", "nibh", "praesent", "tristique", "magna", "sit", "amet", "purus", "gravida", "quis", "blandit", "turpis", "cursus", "in", "hac", "habitasse", "platea", "dictumst", "quisque", "sagittis,", "purus", "sit", "amet", "volutpat", "consequat,", "mauris", "nunc", "congue", "nisi,", "vitae", "suscipit", "tellus", "mauris", "a", "diam",
@@ -42,7 +39,7 @@ var Lorem;
                 for (var i = 0; i < count; i++) {
                     var paragraphLength = this.randomInt(10, 20);
                     var paragraph = this.createText(paragraphLength, Lorem.TYPE.SENTENCE);
-                    paragraphs.push('<p>'+paragraph+'</p>');
+                    paragraphs.push(paragraph);
                 }
                 return paragraphs.join('\n');
             //sentences are loads of words.
@@ -64,19 +61,18 @@ var Lorem;
                 return Lorem.WORDS.slice(wordIndex, wordIndex + count).join(' ').replace(/[\.\,]/g,'');
         }
     };
-    Lorem.prototype.createLorem = function(element) {
+    Lorem.prototype.createLorem = function() {
 
         var lorem = new Array;
         var count;
 
-        if (/\d+-\d+[psw]/.test(this.query)){
-            var range = this.query.substring(0,this.query.length-1).split("-");
-            count = this.randomInt(parseInt(range[0]),parseInt(range[1]));
-        }else{
-            count = parseInt(this.query);
-        }
+        //if (RANGE){
+            //var range = this.query.substring(0,this.query.length-1).split("-");
+            //count = this.randomInt(parseInt(range[0]),parseInt(range[1]));
+        //}
+        count = 5;
 
-        var typeInput = this.query[this.query.length-1];
+        var typeInput = 's'; // Get user input on what mode they want
         if (typeInput=='p') {
             var type = Lorem.TYPE.PARAGRAPH;
         }
@@ -90,41 +86,7 @@ var Lorem;
         lorem.push(this.createText(count, type));
         lorem = lorem.join(' ');
 
-        if (element) {
-            if (this.type == Lorem.TEXT)
-                element.innerHTML += lorem;
-            else if (this.type == Lorem.IMAGE) {
-                //TODO: for now, using lorempixel.
-                var path = '';
-                var options = this.query.split(' ');
-                if (options[0] == 'gray') {
-                    path += '/g';
-                    options.shift(); // Remove first element.
-                }
-                if (element.getAttribute('width'))
-                    path += '/' + element.getAttribute('width');
-
-                if (element.getAttribute('height'))
-                    path += '/' + element.getAttribute('height');
-
-                path += '/' + options.join(' ');
-                element.src = 'http://lorempixel.com'+path;
-            }
-        }
-
-        if (element == null) return lorem;
+        console.log(lorem);
     };
 
-    window.addEventListener('DOMContentLoaded',function(){
-        var els = document.querySelectorAll('[data-lorem]');
-        for(var i in els){
-            if(els.hasOwnProperty(i)){
-                var lorem = new Lorem;
-                lorem.type = els[i].tagName=='IMG' ? Lorem.IMAGE : Lorem.TEXT;
-                lorem.query = els[i].getAttribute('data-lorem');
-                lorem.createLorem(els[i]);
-            }
-        }
-    });
-
-})();
+Lorem.prototype.createLorem();
